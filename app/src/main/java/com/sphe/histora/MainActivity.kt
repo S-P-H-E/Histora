@@ -39,11 +39,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.google.ai.client.generativeai.BuildConfig
 import com.google.ai.client.generativeai.GenerativeModel
 import com.sphe.histora.ui.theme.HistoraTheme
 import org.json.JSONArray
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +61,8 @@ data class QA(
     val explanation: String
 )
 
-val apiKey = com.sphe.histora.BuildConfig.HISTORA_API_KEY
+//val apiKey = com.sphe.histora.BuildConfig.HISTORA_API_KEY
+val apiKey = "AIzaSyAUWCImx47c6tnmuZHNJCT0Sk8c16jNNlw"
 
 @Composable
 fun QuestionsUI(
@@ -265,6 +264,7 @@ fun MainApp() {
     var questionIndex by remember { mutableStateOf(0) }
     val answers = remember { mutableStateListOf<Boolean>() }
 
+    val previousQuestions = remember { mutableSetOf<String>() }
     var screenState by remember { mutableStateOf("welcome") } // "welcome", "quiz", "score"
 
     //Launch once on build
@@ -277,8 +277,21 @@ fun MainApp() {
             modelName = "gemini-2.0-flash",
             apiKey = apiKey
         )
-        val prompt =
-            "Give me 5 unique historical true-or-false questions with increasing difficulty. Each must include a \"question\" (string), an \"answer\" (boolean), and an \"explanation\" (string). Return strictly as a JSON array. No extra text. No \"True or False\" text before the question."
+
+        val pastQs = previousQuestions.joinToString("\n") { "- $it" }
+
+        val prompt = """
+            You are a historian. Generate 5 *new* and *unique* historical true-or-false questions with increasing difficulty. Each must include:
+            - "question" (string)
+            - "answer" (boolean)
+            - "explanation" (string)
+            
+            Do not repeat or rephrase the following questions:
+            $pastQs
+            
+            Return strictly as a JSON array. No intro, no outro, no labels. No *True or False* text before the question.
+            """.trimIndent()
+
         val response = generativeModel.generateContent(prompt)
 
         // remove ```json & ```
@@ -298,6 +311,9 @@ fun MainApp() {
             )
         }
         qaItems = qaList
+
+        // Save each question to previousQuestions
+        qaList.forEach { previousQuestions.add(it.question) }
     }
     // Pass questions to the QuestionsUI and have screens
     when (screenState) {
