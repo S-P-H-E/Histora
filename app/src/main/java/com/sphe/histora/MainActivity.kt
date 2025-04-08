@@ -63,7 +63,7 @@ data class QA(
     val explanation: String
 )
 
-val apiKey = "AIzaSyAUWCImx47c6tnmuZHNJCT0Sk8c16jNNlw"
+val apiKey = com.sphe.histora.BuildConfig.HISTORA_API_KEY
 
 @Composable
 fun QuestionsUI(
