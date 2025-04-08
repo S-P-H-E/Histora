@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+
 android {
     namespace = "com.sphe.histora"
     compileSdk = 35
@@ -16,6 +17,12 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            "String",
+            "HISTORA_API_KEY",
+            "\"${project.findProperty("HISTORA_API_KEY") ?: ""}\""
+        )
     }
 
     buildTypes {
