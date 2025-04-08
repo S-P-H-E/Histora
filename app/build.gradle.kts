@@ -1,8 +1,11 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
+
 
 android {
     namespace = "com.sphe.histora"
@@ -16,6 +19,14 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val properties = Properties()
+        val localProperties = project.rootProject.file("local.properties")
+
+        if (localProperties.exists()) {
+            properties.load(localProperties.inputStream())
+            buildConfigField("String", "HISTORA_API_KEY", "\"${properties.getProperty("HISTORA_API_KEY")}\"")
+        }
     }
 
     buildTypes {
@@ -36,6 +47,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
