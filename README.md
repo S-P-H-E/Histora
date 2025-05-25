@@ -5,7 +5,9 @@
 ---
 
 ## 📸 Screenshots
-(add screenshots)
+![Screenshot 1](https://i.ibb.co/fdb4jTJt/Screenshot-2025-05-25-210948.png)  
+![Screenshot 2](https://i.ibb.co/PsW9PYFC/Screenshot-2025-05-25-211004.png)  
+![Screenshot 3](https://i.ibb.co/7x1X4DwJ/Screenshot-2025-05-25-214141.png)
 
 ---
 
