@@ -5,7 +5,7 @@
 ---
 
 ## 📸 Screenshots
-(add screenshots)
+![Screenshot](https://i.ibb.co/vxcpCpY7/histora.png)
 
 ---
 
