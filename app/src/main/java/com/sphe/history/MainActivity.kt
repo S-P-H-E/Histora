@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -32,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
@@ -205,23 +208,51 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
             }
         } else if (!welcome) {
             // Calculate Score
-            var correct = result.count { it == "Correct" }.toDouble()
+//            var correct = result.count { it == "Correct" }.toDouble()
+            var correct = 10
             var total = answers.size
             var score = correct / total * 100
             Text("Quiz Results")
-            Text("$score%")
+            Text(
+                "$score%",
+                fontSize = 50.sp,
+                fontWeight = FontWeight.Bold,
+            )
             Text("$correct correct out of $total questions")
 
+            var result = listOf<String>("Correct", "Incorrect", "Correct", "Incorrect", "Correct")
+
             for (i in result.indices) {
-                Row {
-                    if (result[i] == "Correct") "✅" else "❌"
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Row (
+                    modifier = Modifier
+                        .sizeIn(minHeight = 50.dp)
+                        .fillMaxWidth()
+                        .shadow(4.dp, RoundedCornerShape(10.dp))
+                        .border(1.dp, Color(230, 230, 232), RoundedCornerShape(10.dp))
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color(247, 249, 250))
+                        .padding(17.dp)
+                ) {
+                    Text(
+                        if (result[i] == "Correct") "✔" else "✕"
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
                     Column {
-                        Text("Q${i + 1}")
-                        Text("Question: ${questions[i]}")
-                        Text("Answer: ${answers[i]}")
+                        Text("${i + 1}. ${questions[i]}")
+                        Row {
+                            Text(
+                                text = "Your answer: ",
+                                color = Color(0xFF7B7A88)
+                            )
+                            Text("${answers[i]}")
+                        }
+
 //                        Text("Result: ${result[i]}")
                     }
                 }
+                Spacer(modifier = Modifier.height(10.dp))
             }
 
             // Replay
